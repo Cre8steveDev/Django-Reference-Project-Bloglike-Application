@@ -85,6 +85,34 @@ DATABASES = {
     }
 }
 
+# MySQL configuration for users who want to use MySQL instead of SQLite.
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": os.getenv("DB_NAME", "your_database_name"),
+#         "USER": os.getenv("DB_USER", "your_database_user"),
+#         "PASSWORD": os.getenv("DB_PASSWORD", "your_database_password"),
+#         "HOST": os.getenv("DB_HOST", "localhost"),
+#         "PORT": os.getenv("DB_PORT", "3306"),
+#     }
+# }
+
+# For Postgresql
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("DB_NAME", "your_database_name"),
+#         "USER": os.getenv("DB_USER", "your_database_user"),
+#         "PASSWORD": os.getenv("DB_PASSWORD", "your_database_password"),
+#         "HOST": os.getenv("DB_HOST", "localhost"),
+#         "PORT": os.getenv("DB_PORT", "5432"),
+#     }
+# }
+
+# required drivers to install for mysql/postgresql
+# For MySQL: pip install mysqlclient
+# For Postgresql: pip install psycopg2
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators

@@ -4,40 +4,45 @@
 {% block title %}Write a post | Commonplace{% endblock %}
 
 {% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
 <link rel="stylesheet" href="{% static 'css/create-post.css' %}" />
 {% endblock %}
 
 {% block content %}
-  <main class="form-page">
+  <main class="form-page create-post-page">
     <div class="container">
       <section class="form-shell form-shell--editor">
-        <span class="eyebrow">New entry</span>
-        <h1>What’s on your mind?</h1>
-        <p class="lead">
-          Write something useful, honest, or simply worth remembering.
-        </p>
+        <div class="editor-intro">
+          <span class="eyebrow">New entry</span>
+          <h1>What’s on your mind?</h1>
+          <p class="lead">
+            Write something useful, honest, or simply worth remembering.
+          </p>
+        </div>
+
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="form-error" role="alert">
+              {% for error in form.non_field_errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+
           {% for field in form %}
-            <div class="form-group">
+            <div class="form-group{% if field.errors %} has-error{% endif %}">
               <label for="{{ field.id_for_label }}">{{ field.label }}</label>
               {{ field }}
               {% if field.help_text %}
                 <small class="form-help">{{ field.help_text }}</small>
               {% endif %}
               {% for error in field.errors %}
-                <small class="form-help">{{ error }}</small>
+                <small class="form-help form-help--error">{{ error }}</small>
               {% endfor %}
             </div>
           {% endfor %}
-
-          {% if form.non_field_errors %}
-            <div class="form-group">
-              {% for error in form.non_field_errors %}
-                <small class="form-help">{{ error }}</small>
-              {% endfor %}
-            </div>
-          {% endif %}
 
           <button class="button button-primary form-submit" type="submit">
             Publish post

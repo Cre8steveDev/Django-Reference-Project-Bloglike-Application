@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-  <main>
+  <main class="post-detail-page">
     <header class="container detail-header">
       <a class="back-link" href="{% url 'all-posts' %}">&larr; Back to explore</a>
       <span class="eyebrow">{{ post.get_category_display }}</span>
@@ -17,18 +17,17 @@
       <div class="detail-meta">
         <span class="avatar">{{ post.author.name|default:post.author.username|slice:":2"|upper }}</span>
         <span>{{ post.author.name|default:post.author.username }}</span>
-        <span class="meta-dot"></span>
+        <span class="meta-dot" aria-hidden="true"></span>
         <span>{{ post.created_at|date:"M j, Y" }}</span>
-        <span class="meta-dot"></span>
+        <span class="meta-dot" aria-hidden="true"></span>
         <span>{{ post.reading_time }} min read</span>
-      </div>
-      <div class="detail-actions">
-        <button class="button button-soft" type="button">Save post</button>
-        <button class="button button-ghost" type="button">Share</button>
       </div>
     </header>
 
-    <div class="container detail-cover">
+    <div class="container detail-cover{% if post.cover_image %} detail-cover--image{% endif %}">
+      {% if post.cover_image %}
+        <img src="{{ post.cover_image.url }}" alt="" />
+      {% endif %}
       <div class="cover-copy">
         <span>{{ post.get_category_display }}</span>
         <strong>{{ post.title }}</strong>
@@ -36,10 +35,6 @@
     </div>
 
     <article class="article-body">
-      <p class="article-kicker">
-        A small field note about attention, familiar streets, and the gift of
-        changing your pace.
-      </p>
       {{ post.body|linebreaks }}
     </article>
 
