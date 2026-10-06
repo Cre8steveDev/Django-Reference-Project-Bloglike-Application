@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Access not available | Commonplace{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/error.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <section class="error-page">
+    <div class="container error-shell">
+      <div class="error-copy">
+        <span class="eyebrow">A quiet boundary</span>
+        <span class="error-code" aria-hidden="true">403</span>
+        <h1>This space is private.</h1>
+        <p class="lead">
+          You do not have permission to view this page. Sign in with the right
+          account or return to a public part of the commonplace.
+        </p>
+        <div class="error-actions">
+          {% if user.is_authenticated %}
+            <a class="button button-primary" href="{% url 'home' %}">Back home</a>
+          {% else %}
+            <a class="button button-primary" href="{% url 'login' %}">Sign in</a>
+          {% endif %}
+          <a class="button button-ghost" href="{% url 'all-posts' %}">Explore posts</a>
+        </div>
+      </div>
+      <div class="error-art" aria-hidden="true">
+        <div class="error-note">
+          <strong>Some notes need a key.</strong>
+          <span>We’ll help you find an open page instead.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

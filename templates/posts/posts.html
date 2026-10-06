@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Explore posts | Commonplace{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/posts.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="container page-header">
+    <span class="eyebrow">The commonplace</span>
+    <h1>Ideas to keep nearby.</h1>
+    <p class="lead">
+      A living collection of notes, essays, lists, and observations from the
+      community.
+    </p>
+    <form class="post-search" action="{% url 'all-posts' %}" method="get" role="search">
+      <label class="sr-only" for="post-search">Search posts</label>
+      <input
+        id="post-search"
+        name="q"
+        type="search"
+        value="{{ query }}"
+        placeholder="Search by topic, title, or writer"
+      />
+      <button class="button button-primary" type="submit">Search</button>
+    </form>
+  </div>
+
+  <section class="section posts-section">
+    <div class="container">
+      <div class="toolbar">
+        <div class="filter-links">
+          <a class="{% if not selected_category %}active{% endif %}" href="{% url 'all-posts' %}">All posts</a>
+          {% for value, label in categories %}
+            <a class="{% if selected_category == value %}active{% endif %}" href="{% url 'all-posts' %}?category={{ value }}">{{ label }}</a>
+          {% endfor %}
+        </div>
+        <span class="meta">{{ posts|length }} {% if posts|length == 1 %}story{% else %}stories{% endif %}</span>
+      </div>
+
+      {% if posts %}
+        <div class="post-grid">
+          {% for post in posts %}
+            <article class="post-card">
+              <div class="post-card-image">{{ post.get_category_display }} / {{ forloop.counter|stringformat:"02d" }}</div>
+              <div class="post-card-content">
+                <h3>
+                  <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </h3>
+                <p>{{ post.excerpt }}</p>
+                <div class="meta">
+                  <span>{{ post.author.name|default:post.author.username }}</span><span class="meta-dot"></span
+                  ><span>{{ post.reading_time }} min read</span>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h3>No matching posts</h3>
+          <p>Try a different search or category filter.</p>
+          <a class="button button-primary" href="{% url 'all-posts' %}">Clear filters</a>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Page not found | Commonplace{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/error.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <section class="error-page">
+    <div class="container error-shell">
+      <div class="error-copy">
+        <span class="eyebrow">A missing page</span>
+        <span class="error-code" aria-hidden="true">404</span>
+        <h1>This thought wandered off.</h1>
+        <p class="lead">
+          The page you’re looking for may have moved, been renamed, or never
+          made it into the commonplace.
+        </p>
+        <div class="error-actions">
+          <a class="button button-primary" href="{% url 'home' %}">Back home</a>
+          <a class="button button-ghost" href="{% url 'all-posts' %}">Explore posts</a>
+        </div>
+      </div>
+      <div class="error-art" aria-hidden="true">
+        <div class="error-note">
+          <strong>Not all detours are wasted.</strong>
+          <span>Take a breath, then try a different path.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

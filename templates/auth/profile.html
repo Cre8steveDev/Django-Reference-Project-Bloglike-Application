@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My profile | Commonplace{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="container profile-header">
+      <div class="profile-avatar">
+        {% if user.avatar %}
+          <img src="{{ user.avatar.url }}" alt="{{ user.name|default:user.username }}" />
+        {% else %}
+          {{ user.name|default:user.username|slice:":2"|upper }}
+        {% endif %}
+      </div>
+      <div class="profile-copy">
+        <span class="eyebrow">Member since {{ user.date_joined|date:"Y" }}</span>
+        <h1>{{ user.name|default:user.username }}</h1>
+        <p class="profile-bio">
+          {{ user.bio|default:"Writer, walker, and collector of useful questions." }}
+        </p>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <strong>{{ posts|length }}</strong><span>Published posts</span>
+          </div>
+          <div class="profile-stat">
+            <strong>{{ profile_completion }}%</strong><span>Profile complete</span>
+          </div>
+          <div class="profile-stat">
+            <strong>{{ user.date_joined|date:"Y" }}</strong><span>Joined</span>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <a class="button button-soft" href="{% url 'create-post' %}">Write a post</a>
+          <a class="button button-ghost" href="#edit-profile">Edit profile</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="section section-tinted" id="posts">
+      <div class="container">
+        <nav class="profile-tabs" aria-label="Profile sections">
+          <a class="active" href="#posts">Posts <span>{{ posts|length }}</span></a>
+          <a href="#edit-profile">About</a>
+        </nav>
+
+        <div class="section-heading">
+          <h2>{{ user.name|default:user.username }}’s posts</h2>
+          <a class="text-link" href="{% url 'create-post' %}">Write something &rarr;</a>
+        </div>
+
+        {% if posts %}
+          <div class="post-grid">
+            {% for post in posts %}
+              <article class="post-card">
+                <div class="post-card-image">{{ post.get_category_display }}</div>
+                <div class="post-card-content">
+                  <h3>
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                  </h3>
+                  <p>{{ post.excerpt }}</p>
+                  <div class="meta">
+                    <span>{{ post.created_at|date:"M j, Y" }}</span><span class="meta-dot"></span
+                    ><span>{{ post.reading_time }} min read</span>
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="form-shell" style="max-width: 48rem;">
+            <h3>No posts yet</h3>
+            <p>Write your first post to start building your profile.</p>
+            <a class="button button-primary" href="{% url 'create-post' %}">Write a post</a>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="profile-note" id="edit-profile">
+      <div class="container profile-note-inner">
+        <div>
+          <span class="eyebrow">Edit your profile</span>
+          <h2>Keep your profile details current.</h2>
+        </div>
+        <form method="post" enctype="multipart/form-data" class="profile-form">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="form-group{% if field.name == 'bio' %} form-group-wide{% endif %}">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {% if field.name == "avatar" %}
+                <input
+                  id="{{ field.id_for_label }}"
+                  name="{{ field.html_name }}"
+                  type="file"
+                  accept="image/*"
+                />
+                <small class="form-help">Optional. Choose a new image to replace your current avatar.</small>
+              {% else %}
+                {{ field }}
+              {% endif %}
+              {% for error in field.errors %}
+                <small class="form-help">{{ error }}</small>
+              {% endfor %}
+            </div>
+          {% endfor %}
+          {% if form.non_field_errors %}
+            <div class="form-group">
+              {% for error in form.non_field_errors %}
+                <small class="form-help">{{ error }}</small>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <button class="button button-primary" type="submit">Save profile</button>
+        </form>
+      </div>
+    </section>
+  </main>
+{% endblock %}

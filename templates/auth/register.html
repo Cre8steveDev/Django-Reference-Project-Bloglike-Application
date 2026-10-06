@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create an account | Commonplace{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <main class="form-page">
+    <div class="container">
+      <section class="form-shell">
+        <span class="eyebrow">Start here</span>
+        <h1>Make yourself at home.</h1>
+        <p class="lead">
+          Create an account to share what you are learning and keep track of
+          the posts you love.
+        </p>
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.help_text %}
+                <small class="form-help">{{ field.help_text }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+                <small class="form-help">{{ error }}</small>
+              {% endfor %}
+            </div>
+          {% endfor %}
+          {% if form.non_field_errors %}
+            <div class="form-group">
+              {% for error in form.non_field_errors %}
+                <small class="form-help">{{ error }}</small>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <button class="button button-primary form-submit" type="submit">
+            Create my account
+          </button>
+        </form>
+        <p class="form-footer">
+          Already have an account? <a href="{% url 'login' %}">Sign in</a>
+        </p>
+      </section>
+    </div>
+  </main>
+{% endblock %}

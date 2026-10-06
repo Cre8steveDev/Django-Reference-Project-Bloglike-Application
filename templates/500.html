@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Something went wrong | Commonplace{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/error.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <section class="error-page">
+    <div class="container error-shell">
+      <div class="error-copy">
+        <span class="eyebrow">A brief interruption</span>
+        <span class="error-code" aria-hidden="true">500</span>
+        <h1>That page needs a moment.</h1>
+        <p class="lead">
+          Something unexpected happened on our side. Try again in a moment, or
+          return to the homepage while we get things back in order.
+        </p>
+        <div class="error-actions">
+          <a class="button button-primary" href="{% url 'home' %}">Back home</a>
+          <a class="button button-ghost" href="{% url 'all-posts' %}">Explore posts</a>
+        </div>
+      </div>
+      <div class="error-art" aria-hidden="true">
+        <div class="error-note">
+          <strong>Even good ideas need a reset.</strong>
+          <span>Please try again when you’re ready.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
